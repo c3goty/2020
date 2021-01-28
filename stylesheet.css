@@ -1,0 +1,376 @@
+/*/////////////////////////////////////////////////////////////////////////////////////////////////
+// GLOBAL ITEMS ///////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////*/
+/* Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;1,100;1,300;1,400;1,700&family=Merriweather:ital,wght@0,300;0,700;0,900;1,300;1,700;1,900&display=block');
+@import url('https://fonts.googleapis.com/css2?family=Merriweather+Sans:ital,wght@0,300;0,400;1,300;1,400&display=block');
+@font-face { font-family: 'Whitney'; font-weight: 300; src: url('./images/font/Whitney300.woff') format("woff"); font-display: block; }
+@font-face { font-family: 'Whitney'; font-weight: 400; src: url('./images/font/Whitney400.woff') format("woff"); font-display: block; }
+@font-face { font-family: 'Whitney'; font-weight: 500; src: url('./images/font/Whitney500.woff') format("woff"); font-display: block; }
+@font-face { font-family: 'Whitney'; font-weight: 600; src: url('./images/font/Whitney600.woff') format("woff"); font-display: block; }
+@font-face { font-family: 'Whitney'; font-style: italic; font-weight: 400; src: url('./images/font/WhitneyItalic.woff') format("woff"); font-display: block; }
+
+/* Variables */
+:root {
+    --user-avatar: url('images/goat.png');
+    --deco-override: dotted;
+}
+
+/* Basic Formatting */ 
+.centreDiv { margin: 0px auto; text-align: center; }
+.hiddenDiv { display: none !important; }
+button { outline:none; }
+button::-moz-focus-inner { border: 0; }
+.dottedUnderline { text-decoration: underline; text-decoration-style: var(--deco-override); }
+
+/* Fake link formatting */
+.link { color: blue; text-decoration: underline; cursor: pointer; }
+.link:visited { color: purple; }
+.link:active { color: red; }
+
+/* Pretentious hr */
+hr.section {
+    overflow: visible;
+    /* For IE */
+    padding: 0;
+    border: none;
+    border-top: medium double #333;
+    color: #333;
+    text-align: center;
+    height: .75em;
+}
+
+hr.section:after {
+    content: "§";
+    display: inline-block;
+    position: relative;
+    top: -0.7em;
+    font-size: 1.5em;
+    padding: 0 0.25em;
+    background: white;
+}
+
+/* Gradient hr */
+hr.divider { 
+    border: 0; 
+    height: 1px; 
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+}
+hr.brightDivider { 
+    border: 0; 
+    height: 1px; 
+    background-image: linear-gradient(to right, rgba(105, 105, 105, 0), rgba(105, 105, 105, 0.75), rgba(105, 105, 105, 0));
+}
+
+/* Div that replicates Discord website buttons */
+.discord_button {
+    background-color: rgb(114, 137, 218);
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    border: 0px;
+    display: inline-block;
+    cursor: pointer;
+    color: #ffffff;
+    font-family: Whitney,Helvetica Neue,Helvetica,Arial,Lucida Grande,sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 15px;
+    height: 45px;
+    width: 250px;
+    line-height: 45px;
+    text-decoration: none;
+    text-rendering: optimizeLegibility;
+}
+
+/* Special styling to make a Discord button look right on mobile */
+.mobile_discord_button {
+    width: 300px;
+    height: 75px;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+/* **** STANDARD MAIN SECTION **** */
+#main {
+    width: 100%;
+    max-width: 1138px;
+    min-height: 100vh;
+    margin: 0px auto;
+    padding: 0px 10px;
+    border-left: 8px solid rgb(174, 0, 1);
+    border-right: 8px solid rgb(174, 0, 1);
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+#main > hr { width: 95%; }
+
+#main .logo {
+    max-width: 90vw;
+    margin: 0px auto;
+    display: block;
+    padding-top: 2.1em;
+    padding-bottom: 2.5em;
+    /* max-height: 40vh; */
+}
+
+#main header { text-align: center; }
+#main header > h1 {
+    font-family: 'Merriweather', 'Cambria', 'Cochin', 'Times New Roman', 'serif';
+    font-size: 1.75rem;
+    margin: 0px;
+}
+
+/*/////////////////////////////////////////////////////////////////////////////////////////////////
+// ACCOUNT PANEL //////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////*/
+#accountContainer {
+    /* Position over top of main page styling, aligned to the right */
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    margin: 4px;
+    /* Place items in a column, right-aligned within the container */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-content: flex-end;
+    align-items: flex-end;
+    /* Initially hide */
+    opacity: 0;
+    transition: opacity .5s ease;
+
+    /* Colours, so we can override them for dark mode */
+    --menu-bg: ghostwhite;
+    --menu-border: ghostwhite;
+    --account-button-bg: aliceblue;
+    --account-button-border: aliceblue;
+    --hover-border: gray;
+    --menu-item-hover-bg: #d8d8df;
+    --error-border: lightgrey;
+    --error-bg: ghostwhite;
+    --error-close-button: grey;
+    --error-close-border: darkgray;
+}
+#accountContainer.showAccount { opacity: 1; }
+
+#accountMenuWrapper {
+    /* Round off the container */
+    background-color: var(--menu-bg);
+    border: 1px solid var(--menu-order);
+    border-radius: 1em;
+    box-sizing: border-box;
+    /* Place items in a column, right-aligned within the container */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-content: flex-end;
+    align-items: flex-end;
+    /* Whitespace is provided by the parent */    
+    margin: 0px;
+    padding: 0px;
+}
+
+/* Account button */
+#accountButton {
+    /* Align items to right within the container */
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-content: center;
+    align-items: center;
+    /* Round off the container */
+    border-radius: 24px;
+    background-color: var(--account-button-bg);
+    border: 1px solid var(--account-button-border);
+    box-sizing: border-box;
+    /* Whitespace is provided by the parent */    
+    margin: 0px;
+    padding: 0px;
+    /* It's a button */
+    cursor: pointer;
+    /* Can't let any other elements cover it up */
+    z-index: 10;
+}
+#accountButton:hover { border-color: var(--hover-border); }
+
+#accountButton > .loginPrompt { 
+    /* Use Discord font */
+    font-family: 'Whitney', "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 400;
+    font-size: medium;
+
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-bottom: 4px;
+
+    position: relative; 
+    text-decoration: underline;
+}
+#accountContainer.loggedIn #accountButton > .loginPrompt { display: none; } /* Collapse when logged in */
+
+#accountButton > .accountImage { 
+    position: relative; 
+    width: 32px; 
+    height: 32px; 
+    border-radius: 100%;
+    margin-right: 5px; 
+    background-image: var(--user-avatar, none); 
+    background-size: contain;
+    display: none;
+}
+#accountContainer.loggedIn #accountButton > .accountImage { display: block; } /* Show when logged in */
+
+#accountButton > .accountUsername { 
+    position: relative; 
+    display: none;
+    font-family: Lato, Whitney, sans-serif;
+    font-weight: 500;
+    font-size: 19px;
+    line-height: 19px;
+    padding-right: 8px;
+}
+#accountContainer.loggedIn #accountButton > .accountUsername { display: block; } /* Show when logged in */
+/* Make the discriminator a bit smaller */
+#accountButton > .accountUsername > .discriminator { 
+    font-weight: 300;
+    font-size: 0.8em;
+}
+
+/* Dropdown menu under account button */
+#accountMenu {
+    /* Whitespace is provided by the parent */    
+    margin: 0px;
+    /* Arrange in a column the full width of the account button */
+    width: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    align-content: stretch;
+    text-align: right;
+    /* Hide the menu by default */
+    max-height: 0em;
+    transition: max-height .5s ease;
+    overflow: hidden;
+}
+/* Show the menu when mousing over the wrapper */
+#accountContainer.loggedIn #accountMenuWrapper:hover #accountMenu,
+#accountContainer.loggedIn #accountMenuWrapper #accountMenu.showMenu { max-height: 3em; }
+
+#accountMenu > * { 
+    padding-right: 6px; 
+    cursor: pointer; 
+    display: flex; 
+    flex-flow: row nowrap; 
+    justify-content: flex-end;
+    align-items: center;
+    line-height: 21px;
+}
+#accountMenu > *:last-child { border-bottom-left-radius: 1em; border-bottom-right-radius: 1em; }
+#accountMenu > *:hover { background-color: var(--menu-item-hover-bg); }
+#accountMenu > * > svg { margin-left: 4px; }
+
+#accountMenuWrapper:hover ~ #menuIndicator { transform: translateY(-1em); }
+#accountContainer:not(.loggedIn) #menuIndicator { transform: translateY(-1em); display: none; }
+
+#accountErrors {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    align-content: stretch;
+    align-items: stretch;
+    align-self: stretch;
+    margin-top: .5em;
+}
+
+#accountErrors > .accountError {
+    /* Make it a bubble */
+    border: 1px solid var(--error-border);
+    border-radius: 3px;
+    background: var(--error-bg);
+    padding: 2px;
+    max-width: 10em;
+}
+
+.accountError > .errorText { font-size: small; }
+.accountError > .errorText > .error { font-style: italic; color: darkred; }
+.accountError > .errorClose { 
+    color: var(--error-close-button);
+    font-size: x-small;
+    float: right;
+
+    border: 1px solid var(--error-close-border);
+    border-right: 0px;
+    border-top: 0px;
+    border-radius: 4px;
+    padding-left: 2px;
+    padding-bottom: 2px;
+    margin-left: 2px;
+
+    cursor: pointer;
+}
+
+/*/////////////////////////////////////////////////////////////////////////////////////////////////
+// INDEX STYLING //////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+/* Subsection styling */
+#welcomeMessage { 
+    font-family: 'Merriweather', 'Cambria', 'Cochin', 'Times New Roman', serif;
+    font-size: 1rem;
+    text-align: center; 
+}
+
+#currentYear {
+    width: 100%;
+    max-width: 37rem;
+    margin: 0 auto;
+    text-align: center;
+}
+
+a.gotyLink { text-decoration-style: double; color: midnightblue; }
+
+#currentYear p { 
+    font-family: 'Merriweather', 'Cambria', 'Cochin', 'Times New Roman', serif;
+    font-size: .9rem;
+}
+
+#previousYears {
+    width: 100%;
+    max-width: 40rem;
+    margin: 0 auto;
+    text-align: center;
+    padding-bottom: 1rem;
+    margin-top: 1rem;
+}
+
+#previousYears img { 
+    max-height: 2.2rem; 
+    max-width: 80vw;
+    display: block; 
+    margin-left: auto; 
+    margin-right: auto; 
+    padding: 1rem;
+}
+#previousYears hr { max-width: 600px; }
+
+#votingInformation { max-width: 56rem; padding-bottom: 2rem; }
+
+#votingInformation > header { font-size: 1.75rem; }
+#votingInformation > .faq { font-family: 'Lato', 'Segoe UI', 'Tahoma', 'Geneva', 'Verdana', sans-serif; padding-top: 1rem; }
+#votingInformation > .faq > .question { font-family: 'Merriweather'; font-weight: bold; }
+#votingInformation > .faq > .answer { }
+
+@media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 13/10), only screen and (min-resolution: 120dpi) {
+    :root { font-size: 14px; }
+    #main .logo { padding-top: 1.6em; padding-bottom: 2em; }
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 1.3) and (max-height: 500px), only screen and (-o-min-device-pixel-ratio: 13/10) and (max-height: 500px), only screen and (min-resolution: 120dpi) and (max-height: 500px) {
+    #main .logo { max-height: 180px; }
+}
